@@ -3,7 +3,9 @@ import "./App.css";
 
 function App() {
   const [input, setInput] = useState({
-    cityName: ""
+    cityName: "",
+    lat: "",
+    lon: ""
   });
   const [weatherData, setWeatherData] = useState({});
   const mockAPI = new Promise((resolve, reject) => {
@@ -64,10 +66,22 @@ function App() {
     // });
   };
 
+  const fetchForecastLatLon = e => {
+    console.log(input);
+    e.preventDefault();
+    fetch(
+      `http://api.openweathermap.org/data/2.5/weather?lat=${input.lat}&lon=${input.lon}&units=Metric&APPID=b0f893da9108b89159170b10c4fbad4a`
+    )
+      .then(res => res.json())
+      .then(data => {
+        setWeatherData(data);
+      });
+  };
+
   const handleChange = evt => {
     const name = evt.target.name;
     const newValue = evt.target.value;
-    setInput({ [name]: newValue });
+    setInput({ ...input, [name]: newValue });
   };
 
   return (
@@ -81,6 +95,12 @@ function App() {
           type="text"
         />
         <input data-cy="submitCity" type="submit" value="Submit" />
+      </form>
+      <form onSubmit={fetchForecastLatLon} className="App">
+        <label>Enter latitude and longitude</label>
+        <input name="lat" data-cy="lat" onChange={handleChange} type="text" />
+        <input name="lon" data-cy="lon" onChange={handleChange} type="text" />
+        <input data-cy="submitLatLon" type="submit" value="Submit" />
       </form>
       {Object.entries(weatherData).length !== 0 && (
         <div data-cy="weatherDisplay">
