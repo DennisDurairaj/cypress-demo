@@ -3,7 +3,9 @@ import "./App.css";
 
 function App() {
   const [input, setInput] = useState({
-    cityName: ""
+    cityName: "",
+    lat: "",
+    lon: ""
   });
   const [weatherData, setWeatherData] = useState({});
   const mockAPI = new Promise((resolve, reject) => {
@@ -67,7 +69,7 @@ function App() {
   const handleChange = evt => {
     const name = evt.target.name;
     const newValue = evt.target.value;
-    setInput({ [name]: newValue });
+    setInput({ ...input, [name]: newValue });
   };
 
   return (
